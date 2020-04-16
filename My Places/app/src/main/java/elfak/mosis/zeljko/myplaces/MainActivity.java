@@ -51,7 +51,10 @@ public class MainActivity extends AppCompatActivity {
         } else if (id == R.id.new_place_item) {
             Toast.makeText(this, "New Place!", Toast.LENGTH_SHORT).show();
         } else if (id == R.id.my_places_list_item) {
-            Toast.makeText(this, "My Places!", Toast.LENGTH_SHORT).show();
+
+            Intent i = new Intent(this, MyPlacesList.class);
+            startActivity(i);
+
         } else if(id == R.id.about_item) {
 
             Intent i = new Intent(this,About.class);
