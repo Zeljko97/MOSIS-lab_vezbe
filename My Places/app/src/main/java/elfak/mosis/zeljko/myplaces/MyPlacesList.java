@@ -1,12 +1,15 @@
 package elfak.mosis.zeljko.myplaces;
 
+
 import android.app.Activity;
+
 import android.os.Bundle;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
 import androidx.annotation.NonNull;
+
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -17,6 +20,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Adapter;
 import android.widget.AdapterView;
+
+
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -34,13 +39,16 @@ public class MyPlacesList extends AppCompatActivity {
         return true;
 
     }
+
     static int NEW_PLACE=1;
+
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
 
         if(id == R.id.show_map_item) {
             Toast.makeText(this, "Show Map!", Toast.LENGTH_SHORT).show();
+
         }
         else if (id == R.id.new_place_item)
         {
@@ -56,6 +64,7 @@ public class MyPlacesList extends AppCompatActivity {
             finish();
         }
 
+
         return super.onOptionsItemSelected(item);
     }
 
@@ -65,13 +74,16 @@ public class MyPlacesList extends AppCompatActivity {
         setContentView(R.layout.activity_my_places_list);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
+
 
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                // Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                   //      .setAction("Action", null).show();
                 Intent i=new Intent(MyPlacesList.this,EditMyPlaceActivity.class);
@@ -139,6 +151,7 @@ public class MyPlacesList extends AppCompatActivity {
             ListView myPlacesList=(ListView)findViewById(R.id.my_places_list);
             myPlacesList.setAdapter(new ArrayAdapter<MyPlace>(this,android.R.layout.simple_list_item_1,MyPlacesData.getInstance().getMyPlaces()));
         }
+
     }
 
 }
