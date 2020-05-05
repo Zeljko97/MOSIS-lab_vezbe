@@ -1,5 +1,6 @@
 package elfak.mosis.zeljko.myplaces;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
@@ -73,6 +74,8 @@ public class EditMyPlaceActivity extends AppCompatActivity implements View.OnCli
                 finishedButton.setEnabled(s.length()>0);
             }
         });
+        Button locationButton = (Button)findViewById(R.id.editmyplace_location_button);
+        locationButton.setOnClickListener(this);
 
     }
 
@@ -84,13 +87,21 @@ public class EditMyPlaceActivity extends AppCompatActivity implements View.OnCli
                 String nme = etName.getText().toString();
                 EditText etDesc = (EditText) findViewById(R.id.editmyplace_desc_edit);
                 String desc = etDesc.getText().toString();
+                EditText latEdit = (EditText)findViewById(R.id.editmyplace_lat_edit);
+                String lat = latEdit.getText().toString();
+                EditText lonEdit = (EditText)findViewById(R.id.editmyplace_lon_edit);
+                String lon = lonEdit.getText().toString();
                 if(!editMode){
                     MyPlace place=new MyPlace(nme,desc);
+                    place.setLatitude(lat);
+                    place.setLongitude(lon);
                     MyPlacesData.getInstance().addNewPlace(place);
                 } else{
                     MyPlace place= MyPlacesData.getInstance().getPlace(position);
                     place.setName(nme);
                     place.setDescription(desc);
+                    place.setLatitude(lat);
+                    place.setLongitude(lon);
                 }
                 setResult(Activity.RESULT_OK);
                 finish();
@@ -101,9 +112,36 @@ public class EditMyPlaceActivity extends AppCompatActivity implements View.OnCli
                 finish();
                 break;
             }
+            case R.id.editmyplace_location_button:
+            {
+                Intent i = new Intent(this,MyPlacesMapsActivity.class);
+                ///
+                i.putExtra("state", MyPlacesMapsActivity.SELECT_COORDINATES);
+                ///
+                startActivityForResult(i,1);
+            }
 
         }
 
+    }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        try {
+            if(resultCode == Activity.RESULT_OK) {
+                String lon = data.getExtras().getString("lon");
+                EditText lonText = (EditText) findViewById(R.id.editmyplace_lon_edit);
+                lonText.setText(lon);
+                String lat = data.getExtras().getString("lat");
+                EditText latText = (EditText) findViewById(R.id.editmyplace_lat_edit);
+                latText.setText(lat);
+            }
+        }
+        catch(Exception e) {
+
+        }
     }
 
     @Override
@@ -122,6 +160,7 @@ public class EditMyPlaceActivity extends AppCompatActivity implements View.OnCli
 
         if(id==R.id.show_map_item) {
             Toast.makeText(this,"Show Map!", Toast.LENGTH_SHORT).show();
+
         }
         else if (id == R.id.my_places_list_item) {
 

@@ -105,6 +105,8 @@ public class MyPlacesList extends AppCompatActivity {
                 menu.setHeaderTitle(place.getName());
                 menu.add(0,1,1,"View place");
                 menu.add(0,2,2,"Edit place");
+                menu.add(0,3,3,"Delete place");
+                menu.add(0,4,4,"Show on map");
             }
         });
     }
@@ -125,9 +127,26 @@ public class MyPlacesList extends AppCompatActivity {
         {
             i=new Intent(this,EditMyPlaceActivity.class);
             i.putExtras(positionBundle);
-            startActivity(i);
+            startActivityForResult(i,1);
+        }
+        else if (item.getItemId() == 3) {
+            MyPlacesData.getInstance().deletePlace(info.position);
+            setList();
+        }
+        else if(item.getItemId() == 4) {
+            i = new Intent(this, MyPlacesMapsActivity.class);
+            i.putExtra("state", MyPlacesMapsActivity.CENTER_PLACE_ON_MAP);
+            MyPlace place = MyPlacesData.getInstance().getPlace(info.position);
+            i.putExtra("lat", place.getLatitude());
+            i.putExtra("lon",place.getLongitute());
+            startActivityForResult(i,2);
         }
         return super.onContextItemSelected(item);
+    }
+
+    private void setList() {
+        ListView myPlacesList = (ListView)findViewById(R.id.my_places_list);
+        myPlacesList.setAdapter(new ArrayAdapter<MyPlace>(this, android.R.layout.simple_list_item_1, MyPlacesData.getInstance().getMyPlaces()));
     }
 
     @Override
