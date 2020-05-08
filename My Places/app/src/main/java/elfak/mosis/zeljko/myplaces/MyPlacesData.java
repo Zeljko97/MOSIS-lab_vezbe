@@ -50,8 +50,8 @@ public class MyPlacesData<ListUpdatedEventListener> {
                 myPlace.key=myPlaceKey;
                 myPlaces.add(myPlace);
                 myPlacesKeyIndexMapping.put(myPlaceKey,myPlaces.size()-1);
-               // if(updateListener!=null)
-                    //updateListener.onListUpdated();
+              /*  if(updateListener!=null)
+                    updateListener.OnListUpdated();*/
             }
         }
 
@@ -140,12 +140,14 @@ public class MyPlacesData<ListUpdatedEventListener> {
         }
     }
 
-    ListUpdatedEventListener updateListener;
+   ListUpdatedEventListener updateListener;
     public void setEventListener(ListUpdatedEventListener listener){
         updateListener=listener;
     }
     public interface ListUpdatedEventListener{
         void onListUpdated();
     }
+
+
 
 }

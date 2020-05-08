@@ -24,10 +24,34 @@
         android:id="@+id/textView6"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/editmyplace_desc_label" />
+        android:text="Description" />
 
     <TextView
         android:id="@+id/viewmyplace_desc_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="TextView" />
+
+    <TextView
+        android:id="@+id/textView8"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Longitude:" />
+
+    <TextView
+        android:id="@+id/viewmyplace_long_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="TextView" />
+
+    <TextView
+        android:id="@+id/textView10"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Latitude:" />
+
+    <TextView
+        android:id="@+id/viewmyplace_lat_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="TextView" />
