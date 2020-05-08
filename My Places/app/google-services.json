@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "1085562951131",
+    "firebase_url": "https://my-places-ccbed.firebaseio.com",
+    "project_id": "my-places-ccbed",
+    "storage_bucket": "my-places-ccbed.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1085562951131:android:1715b779967d82172383fe",
+        "android_client_info": {
+          "package_name": "elfak.mosis.zeljko.myplaces"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1085562951131-upnh7h5n4su1l2gabo0i19mltlj66u82.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "elfak.mosis.zeljko.myplaces",
+            "certificate_hash": "3b98579364a4206278672da04c754860a4107585"
+          }
+        },
+        {
+          "client_id": "1085562951131-18t9h76bkqo6jsfn0rgvhmnfovog6hf3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAwHGvwGKdDS-s-M_jhs9R6HF5uPZJAHY0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1085562951131-18t9h76bkqo6jsfn0rgvhmnfovog6hf3.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

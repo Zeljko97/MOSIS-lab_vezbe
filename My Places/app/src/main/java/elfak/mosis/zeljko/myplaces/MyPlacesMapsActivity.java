@@ -3,7 +3,6 @@ package elfak.mosis.zeljko.myplaces;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
-import androidx.fragment.app.FragmentActivity;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
@@ -147,7 +146,7 @@ public class MyPlacesMapsActivity extends AppCompatActivity implements OnMapRead
         for(int i = 0;i<places.size();i++){
             MyPlace place = places.get(i);
             String lat = place.getLatitude();
-            String lon = place.getLongitute();
+            String lon = place.getLongitude();
             LatLng loc = new LatLng(Double.parseDouble(lat), Double.parseDouble(lon));
             MarkerOptions markerOptions = new MarkerOptions();
             markerOptions.position(loc);

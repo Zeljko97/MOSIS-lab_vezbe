@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.os.Bundle;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -15,7 +14,6 @@ import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
@@ -138,7 +136,7 @@ public class MyPlacesList extends AppCompatActivity {
             i.putExtra("state", MyPlacesMapsActivity.CENTER_PLACE_ON_MAP);
             MyPlace place = MyPlacesData.getInstance().getPlace(info.position);
             i.putExtra("lat", place.getLatitude());
-            i.putExtra("lon",place.getLongitute());
+            i.putExtra("lon",place.getLongitude());
             startActivityForResult(i,2);
         }
         return super.onContextItemSelected(item);
