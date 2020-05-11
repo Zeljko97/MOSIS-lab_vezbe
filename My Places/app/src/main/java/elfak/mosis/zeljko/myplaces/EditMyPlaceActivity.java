@@ -40,24 +40,38 @@ public class EditMyPlaceActivity extends AppCompatActivity implements View.OnCli
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         final Button finishedButton=(Button)findViewById(R.id.editmyplace_finished_button);
+        Button canceledButton = (Button)findViewById(R.id.editmyplace_cancel_button);
         finishedButton.setOnClickListener(this);
         finishedButton.setEnabled(false);
         finishedButton.setText("Add");
         Button cancelButton=(Button)findViewById(R.id.editmyplace_cancel_button);
         cancelButton.setOnClickListener(this);
         EditText nameEditText=(EditText)findViewById(R.id.editmyplace_name_edit);
+        EditText descEditText = (EditText)findViewById(R.id.editmyplace_desc_edit);
+        EditText latitudeEdit = (EditText)findViewById((R.id.editmyplace_lat_edit));
+        EditText longitudeEdit = (EditText)findViewById((R.id.editmyplace_lon_edit));
         if(!editMode)
         {
             finishedButton.setEnabled(false);
             finishedButton.setText("Add");
+
         } else if(position>=0)
         {
             finishedButton.setText("Save");
             MyPlace place=MyPlacesData.getInstance().getPlace(position);
             nameEditText.setText(place.name);
-            EditText descEditText = (EditText)findViewById(R.id.editmyplace_desc_edit);
             descEditText.setText(place.description);
+
+            latitudeEdit.setText(place.latitude);
+
+            longitudeEdit.setText((place.longitude));
         }
+
+        finishedButton.setOnClickListener(this);
+        finishedButton.setEnabled(false);
+        canceledButton.setOnClickListener(this);
+
+
         nameEditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -74,6 +88,61 @@ public class EditMyPlaceActivity extends AppCompatActivity implements View.OnCli
                 finishedButton.setEnabled(s.length()>0);
             }
         });
+
+        descEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                finishedButton.setEnabled(s.length()>0);
+            }
+        });
+
+
+        latitudeEdit.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                finishedButton.setEnabled(s.length()>0);
+            }
+        });
+
+
+        longitudeEdit.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                finishedButton.setEnabled(s.length()>0);
+            }
+        });
+
+
         Button locationButton = (Button)findViewById(R.id.editmyplace_location_button);
         locationButton.setOnClickListener(this);
 

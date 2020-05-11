@@ -1,6 +1,7 @@
 package elfak.mosis.zeljko.myplaces;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
@@ -28,6 +29,11 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -39,11 +45,13 @@ public class MyPlacesMapsActivity extends AppCompatActivity implements OnMapRead
     ////
     public static final int SHOW_MAP = 0;
     public static final int CENTER_PLACE_ON_MAP = 1;
-    public static final int SELECT_COORDINATES = 1;
+    public static final int SELECT_COORDINATES = 2;
+    static final int PERMISSION_ACCESS_FINE_LOCATION = 1;
 
     private int state = 0;
     private boolean selCoorsEnabled = false;
     private LatLng placeLoc;
+    DatabaseReference database;
     ////
 
     @Override
@@ -71,6 +79,8 @@ public class MyPlacesMapsActivity extends AppCompatActivity implements OnMapRead
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
+        database = FirebaseDatabase.getInstance().getReference().child("my-place");
+
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
       /*  fab.setOnClickListener(new View.OnClickListener() {
                                    @Override
@@ -94,6 +104,20 @@ public class MyPlacesMapsActivity extends AppCompatActivity implements OnMapRead
           if(null!=layout)
               layout.removeView(fab);
       }
+
+      database.addValueEventListener(new ValueEventListener() {
+          @Override
+          public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+              addMyPlaceMarkers();
+          }
+
+          @Override
+          public void onCancelled(@NonNull DatabaseError databaseError) {
+
+          }
+      });
+
+
       ///
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -112,7 +136,7 @@ public class MyPlacesMapsActivity extends AppCompatActivity implements OnMapRead
      * installed Google Play services and returned to the app.
      */
 
-    static final int PERMISSION_ACCESS_FINE_LOCATION = 1;
+
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
@@ -126,10 +150,12 @@ public class MyPlacesMapsActivity extends AppCompatActivity implements OnMapRead
             if(state == SHOW_MAP)
                 mMap.setMyLocationEnabled(true);
             else if(state == CENTER_PLACE_ON_MAP)
-                setOnMapClickListener();
-            else
                 mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(placeLoc, 15));
-            //addMyPlaceMarkes();
+            else
+                setOnMapClickListener();
+
+
+            addMyPlaceMarkers();
         }
         // Add a marker in Sydney and move the camera
        // LatLng sydney = new LatLng(-34, 151);
@@ -137,6 +163,8 @@ public class MyPlacesMapsActivity extends AppCompatActivity implements OnMapRead
      //   mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
 
     }
+
+
 
     ///
     private HashMap<Marker, Integer> markerPlaceIdMap;
@@ -202,11 +230,12 @@ public class MyPlacesMapsActivity extends AppCompatActivity implements OnMapRead
                     if(state == SHOW_MAP)
                         mMap.setMyLocationEnabled(true);
                     else if(state == CENTER_PLACE_ON_MAP)
-                        setOnMapClickListener();
-                    else
                         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(placeLoc, 15));
-                   // addMyPlaceMarkes();
-                    ///
+                    else
+                        setOnMapClickListener();
+
+
+                    addMyPlaceMarkers();
                 }
                 return;
             }
@@ -257,5 +286,53 @@ public class MyPlacesMapsActivity extends AppCompatActivity implements OnMapRead
             }
         }
         return super.onOptionsItemSelected(item);
+    }
+
+
+    private void addMyPlaceMarkers()
+    {
+        ArrayList<MyPlace> places = MyPlacesData.getInstance().getMyPlaces();
+        markerPlaceIdMap = new HashMap<>((int)((double)places.size()*1.2));
+        mMap.clear();
+        for(int i = 0; i < places.size(); i++)
+        {
+            MyPlace place = places.get(i);
+            String lat = place.getLatitude();
+            String lon = place.getLongitude();
+            LatLng loc = new LatLng(Double.parseDouble(lat),Double.parseDouble(lon));
+            MarkerOptions markerOptions = new MarkerOptions();
+            markerOptions.position(loc);
+            markerOptions.title(place.getName());
+            Marker marker = mMap.addMarker(markerOptions);
+            markerPlaceIdMap.put(marker,i);
+        }
+
+        mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener()
+        {
+            @Override
+            public boolean onMarkerClick(Marker marker)
+            {
+                Intent intent = new Intent(MyPlacesMapsActivity.this,ViewMyPlacesActivity.class);
+                int i = markerPlaceIdMap.get(marker);
+                intent.putExtra("position",i);
+                startActivity(intent);
+                return true;
+            }
+        });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        try
+        {
+            if (resultCode == Activity.RESULT_OK)
+            {
+                addMyPlaceMarkers();
+            }
+        } catch (Exception e)
+        {
+        }
     }
 }

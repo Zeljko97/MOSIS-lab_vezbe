@@ -13,13 +13,15 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class MyPlacesData<ListUpdatedEventListener> {
+public class MyPlacesData {
     private ArrayList<MyPlace> myPlaces;
     private HashMap<String, Integer> myPlacesKeyIndexMapping;
     private DatabaseReference database;
     private static final String FIREBASE_CHILD="my-places";
+    ListUpdatedEventListener updateListener;
 
     private MyPlacesData(){
+
         myPlaces=new ArrayList<MyPlace>();
         //myPlaces.add(new MyPlace("Test Place"));
         myPlacesKeyIndexMapping=new HashMap<String,Integer>();
@@ -27,11 +29,13 @@ public class MyPlacesData<ListUpdatedEventListener> {
         database.child(FIREBASE_CHILD).addChildEventListener(childEventListener);
         database.child(FIREBASE_CHILD).addListenerForSingleValueEvent(parentEventListener);
 
+
     }
     ValueEventListener parentEventListener=new ValueEventListener() {
         @Override
         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
+            if(updateListener != null)
+                updateListener.onListUpdated();
         }
 
         @Override
@@ -50,8 +54,8 @@ public class MyPlacesData<ListUpdatedEventListener> {
                 myPlace.key=myPlaceKey;
                 myPlaces.add(myPlace);
                 myPlacesKeyIndexMapping.put(myPlaceKey,myPlaces.size()-1);
-              /*  if(updateListener!=null)
-                    updateListener.OnListUpdated();*/
+                if(updateListener != null)
+                    updateListener.onListUpdated();
             }
         }
 
@@ -69,6 +73,8 @@ public class MyPlacesData<ListUpdatedEventListener> {
                 myPlaces.add(myPlace);
                 myPlacesKeyIndexMapping.put(myPlaceKey,myPlaces.size()-1);
             }
+            if(updateListener != null)
+                updateListener.onListUpdated();
         }
 
         @Override
@@ -80,6 +86,9 @@ public class MyPlacesData<ListUpdatedEventListener> {
                 myPlaces.remove(index);
                 recreateKeyIndexMapping();
             }
+
+            if(updateListener != null)
+                updateListener.onListUpdated();
         }
 
         @Override
@@ -140,12 +149,17 @@ public class MyPlacesData<ListUpdatedEventListener> {
         }
     }
 
-   ListUpdatedEventListener updateListener;
+    public interface ListUpdatedEventListener{
+        void onListUpdated();
+    }
+
     public void setEventListener(ListUpdatedEventListener listener){
         updateListener=listener;
     }
-    public interface ListUpdatedEventListener{
-        void onListUpdated();
+
+    public DatabaseReference getRef()
+    {
+        return this.database;
     }
 
 

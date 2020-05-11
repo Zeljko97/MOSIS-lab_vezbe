@@ -5,6 +5,8 @@ import android.os.Bundle;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -17,12 +19,16 @@ import android.widget.Toast;
 import android.content.Intent;
 public class MainActivity extends AppCompatActivity {
 
+    FirebaseAuth mAuth;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        mAuth = FirebaseAuth.getInstance();
 
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -70,7 +76,12 @@ public class MainActivity extends AppCompatActivity {
         } else if(id == R.id.about_item) {
             Intent i = new Intent(this, About.class);
             startActivity(i);
+        } else if(id == R.id.logout_item) {
+            FirebaseAuth.getInstance().signOut();
+            finish();
+            startActivity(new Intent(getApplicationContext(), LoginActivity.class));
         }
+
 
         return super.onOptionsItemSelected(item);
     }
@@ -81,5 +92,23 @@ public class MainActivity extends AppCompatActivity {
         if(resultCode == Activity.RESULT_OK){
             Toast.makeText(this, "New Place added!", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if(mAuth.getCurrentUser() == null){
+            finish();
+            startActivity(new Intent(getApplicationContext(), LoginActivity.class));
+        }
+
+        loadBasicUserInfo();
+    }
+
+    private void loadBasicUserInfo() {
+        FirebaseUser user = mAuth.getCurrentUser();
+        String name = user.getEmail();
+
+        Toast.makeText(getApplicationContext(), "Welcome " + name, Toast.LENGTH_SHORT).show();
     }
 }
